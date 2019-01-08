@@ -1,0 +1,843 @@
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 20
+Server version: 8.0.13 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use life
+Database changed
+mysql> show tables;
++----------------+
+| Tables_in_life |
++----------------+
+| limbs          |
++----------------+
+1 row in set (0.15 sec)
+
+mysql> select * from limbs;
++--------------+------+------+
+| thing        | legs | arms |
++--------------+------+------+
+| insect       |    6 |    0 |
+| squid        |    0 |   10 |
+| octopus      |    0 |    8 |
+| fish         |    0 |    0 |
+| centipede    |  100 |    0 |
+| table        |    4 |    0 |
+| armchair     |    4 |    2 |
+| phonograph   |    0 |    1 |
+| tripod       |    3 |    0 |
+| Peg Leg Pete |    1 |    2 |
+| space alien  | NULL | NULL |
++--------------+------+------+
+11 rows in set (0.00 sec)
+
+mysql> alter table limbs
+    -> add column thing Primary key;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Primary key' at line 2
+mysql> alter table limbs
+    -> add column(thing)Primary key;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')Primary key' at line 2
+mysql> \c
+mysql> create table employee
+    -> (
+    -> Empname varchar(20),
+    -> num int,
+    -> Date_time Timestamp);
+Query OK, 0 rows affected (1.32 sec)
+
+mysql> insert into employee (Empname,num) values ('Yash Saxena',7500886321);
+ERROR 1264 (22003): Out of range value for column 'num' at row 1
+mysql> insert into employee (Empname,num) values ('Yash Saxena',750088632);
+Query OK, 1 row affected (0.28 sec)
+
+mysql> select * from employee;
++-------------+-----------+-----------+
+| Empname     | num       | Date_time |
++-------------+-----------+-----------+
+| Yash Saxena | 750088632 | NULL      |
++-------------+-----------+-----------+
+1 row in set (0.00 sec)
+
+mysql> alter table employee
+    -> drop Date_time;
+Query OK, 0 rows affected (1.31 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee;
++-------------+-----------+
+| Empname     | num       |
++-------------+-----------+
+| Yash Saxena | 750088632 |
++-------------+-----------+
+1 row in set (0.00 sec)
+
+mysql> insert into employee (Empname,num) values ('Yash',70088632);
+Query OK, 1 row affected (0.17 sec)
+
+mysql> insert into employee (Empname,num) values ('Harsh',0088632);
+Query OK, 1 row affected (0.11 sec)
+
+mysql> insert into employee (Empname,num) values ('Anish',088632);
+Query OK, 1 row affected (0.19 sec)
+
+mysql> select * from employee;
++-------------+-----------+
+| Empname     | num       |
++-------------+-----------+
+| Yash Saxena | 750088632 |
+| Yash        |  70088632 |
+| Harsh       |     88632 |
+| Anish       |     88632 |
++-------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> insert into employee (Empname,num) values ('Amit',88632);
+Query OK, 1 row affected (0.21 sec)
+
+mysql> select DISTINCT Empname,num from employee;
++-------------+-----------+
+| Empname     | num       |
++-------------+-----------+
+| Yash Saxena | 750088632 |
+| Yash        |  70088632 |
+| Harsh       |     88632 |
+| Anish       |     88632 |
+| Amit        |     88632 |
++-------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select DISTINCT num from employee;
++-----------+
+| num       |
++-----------+
+| 750088632 |
+|  70088632 |
+|     88632 |
++-----------+
+3 rows in set (0.00 sec)
+
+mysql> alter table employee
+    -> add column sales;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql> add column sales int(20);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'add column sales int(20)' at line 1
+mysql> alter table employee
+    -> add column sales int(20);
+Query OK, 0 rows affected (0.74 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into employee (sales) values(80);
+Query OK, 1 row affected (0.19 sec)
+
+mysql> select * from employee;
++-------------+-----------+-------+
+| Empname     | num       | sales |
++-------------+-----------+-------+
+| Yash Saxena | 750088632 |  NULL |
+| Yash        |  70088632 |  NULL |
+| Harsh       |     88632 |  NULL |
+| Anish       |     88632 |  NULL |
+| Amit        |     88632 |  NULL |
+| NULL        |      NULL |    80 |
++-------------+-----------+-------+
+6 rows in set (0.00 sec)
+
+mysql> insert into employee
+    -> Empname='Manager'where num=NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Empname='Manager'where num=NULL' at line 2
+mysql> insert into employee values('Manager')where num=NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where num=NULL' at line 1
+mysql> insert into employee values ('Manager') where num=NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where num=NULL' at line 1
+mysql> insert into employee values ('Manager');
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into employee (Empname) values ('Manager') where sales=80;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where sales=80' at line 1
+mysql> insert into employee (Empname) values ('Manager');
+Query OK, 1 row affected (0.16 sec)
+
+mysql> select * from employee;
++-------------+-----------+-------+
+| Empname     | num       | sales |
++-------------+-----------+-------+
+| Yash Saxena | 750088632 |  NULL |
+| Yash        |  70088632 |  NULL |
+| Harsh       |     88632 |  NULL |
+| Anish       |     88632 |  NULL |
+| Amit        |     88632 |  NULL |
+| NULL        |      NULL |    80 |
+| Manager     |      NULL |  NULL |
++-------------+-----------+-------+
+7 rows in set (0.00 sec)
+
+mysql> drop table employee;
+Query OK, 0 rows affected (0.31 sec)
+
+mysql> create table employe
+    -> (
+    -> name varchar(20),
+    -> sales int(30),
+    -> Date Date);
+Query OK, 0 rows affected (0.46 sec)
+
+mysql> insert into employee values ('Yash Saxena',12000,"2918-09-02");
+ERROR 1146 (42S02): Table 'life.employee' doesn't exist
+mysql> insert into employe values ('Yash Saxena',12000,"2918-09-02");
+Query OK, 1 row affected (0.25 sec)
+
+mysql> select * from employe;
++-------------+-------+------------+
+| name        | sales | Date       |
++-------------+-------+------------+
+| Yash Saxena | 12000 | 2918-09-02 |
++-------------+-------+------------+
+1 row in set (0.00 sec)
+
+mysql> insert into employe values ('Sachin pant',13000,"2918-09-03");
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into employe values ('Manager',17000,"2018-10-03");
+Query OK, 1 row affected (0.17 sec)
+
+mysql> insert into employe values ('Marketing head',89000,"2018-11-03");
+Query OK, 1 row affected (0.26 sec)
+
+mysql> select * from employe;
++----------------+-------+------------+
+| name           | sales | Date       |
++----------------+-------+------------+
+| Yash Saxena    | 12000 | 2918-09-02 |
+| Sachin pant    | 13000 | 2918-09-03 |
+| Manager        | 17000 | 2018-10-03 |
+| Marketing head | 89000 | 2018-11-03 |
++----------------+-------+------------+
+4 rows in set (0.00 sec)
+
+mysql> update employe
+    -> set Date="2018-08-06"
+    -> where sales=13000;
+Query OK, 1 row affected (0.20 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employe
+    -> set Date="2018-07-01"
+    -> where name='Yash Saxena';
+Query OK, 1 row affected (0.42 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employe;
++----------------+-------+------------+
+| name           | sales | Date       |
++----------------+-------+------------+
+| Yash Saxena    | 12000 | 2018-07-01 |
+| Sachin pant    | 13000 | 2018-08-06 |
+| Manager        | 17000 | 2018-10-03 |
+| Marketing head | 89000 | 2018-11-03 |
++----------------+-------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select DISTINCT from employee;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from employee' at line 1
+mysql> select DISTINCT from employe;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from employe' at line 1
+mysql> select DISTINCT sales from employe;
++-------+
+| sales |
++-------+
+| 12000 |
+| 13000 |
+| 17000 |
+| 89000 |
++-------+
+4 rows in set (0.00 sec)
+
+mysql> select DISTINCT Date from employe;
++------------+
+| Date       |
++------------+
+| 2018-07-01 |
+| 2018-08-06 |
+| 2018-10-03 |
+| 2018-11-03 |
++------------+
+4 rows in set (0.00 sec)
+
+mysql> select DISTINCT name from employe;
++----------------+
+| name           |
++----------------+
+| Yash Saxena    |
+| Sachin pant    |
+| Manager        |
+| Marketing head |
++----------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from employe where sales>(12000+1000);
++----------------+-------+------------+
+| name           | sales | Date       |
++----------------+-------+------------+
+| Manager        | 17000 | 2018-10-03 |
+| Marketing head | 89000 | 2018-11-03 |
++----------------+-------+------------+
+2 rows in set (0.00 sec)
+
+mysql> select avg(sales) from employe;
++------------+
+| avg(sales) |
++------------+
+| 32750.0000 |
++------------+
+1 row in set (0.35 sec)
+
+mysql> select names from employe
+    -> where date < " 2018-10-03";
+ERROR 1054 (42S22): Unknown column 'names' in 'field list'
+mysql> select name from employe
+    -> where date < " 2018-10-03";
++-------------+
+| name        |
++-------------+
+| Yash Saxena |
+| Sachin pant |
++-------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from employe
+    -> where sales < (0.8*sales);
+Empty set (0.00 sec)
+
+mysql> select * from employe
+    -> where sales < (0.2*sales);
+Empty set (0.00 sec)
+
+mysql> alter table employe add column target int;
+Query OK, 0 rows affected (0.63 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from employe;
++----------------+-------+------------+--------+
+| name           | sales | Date       | target |
++----------------+-------+------------+--------+
+| Yash Saxena    | 12000 | 2018-07-01 |   NULL |
+| Sachin pant    | 13000 | 2018-08-06 |   NULL |
+| Manager        | 17000 | 2018-10-03 |   NULL |
+| Marketing head | 89000 | 2018-11-03 |   NULL |
++----------------+-------+------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> update employe
+    -> set targte=10000
+    -> where sales=12000;
+ERROR 1054 (42S22): Unknown column 'targte' in 'field list'
+mysql> update employe
+    -> set target=10000
+    -> where sales=12000;
+Query OK, 1 row affected (0.20 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employe
+    -> set target=14000
+    -> where name='Sachin pant';
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employe
+    -> set target =22000
+    -> where sale=17000;
+ERROR 1054 (42S22): Unknown column 'sale' in 'where clause'
+mysql> update employe
+    -> set target =22000
+    -> where sales=17000;
+Query OK, 1 row affected (0.16 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employe;
++----------------+-------+------------+--------+
+| name           | sales | Date       | target |
++----------------+-------+------------+--------+
+| Yash Saxena    | 12000 | 2018-07-01 |  10000 |
+| Sachin pant    | 13000 | 2018-08-06 |  14000 |
+| Manager        | 17000 | 2018-10-03 |  22000 |
+| Marketing head | 89000 | 2018-11-03 |   NULL |
++----------------+-------+------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select * from employe where sales<target;
++-------------+-------+------------+--------+
+| name        | sales | Date       | target |
++-------------+-------+------------+--------+
+| Sachin pant | 13000 | 2018-08-06 |  14000 |
+| Manager     | 17000 | 2018-10-03 |  22000 |
++-------------+-------+------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select * from employe where sales<(0.8*target);
++---------+-------+------------+--------+
+| name    | sales | Date       | target |
++---------+-------+------------+--------+
+| Manager | 17000 | 2018-10-03 |  22000 |
++---------+-------+------------+--------+
+1 row in set (0.00 sec)
+
+mysql> select name,sales,target from employe where target between 10000 and 23000;
++-------------+-------+--------+
+| name        | sales | target |
++-------------+-------+--------+
+| Yash Saxena | 12000 |  10000 |
+| Sachin pant | 13000 |  14000 |
+| Manager     | 17000 |  22000 |
++-------------+-------+--------+
+3 rows in set (0.00 sec)
+
+mysql> insert into employe values ('ram naresh',1200,"0218-12-05",1201);
+Query OK, 1 row affected (0.22 sec)
+
+mysql> select * from employe;
++----------------+-------+------------+--------+
+| name           | sales | Date       | target |
++----------------+-------+------------+--------+
+| Yash Saxena    | 12000 | 2018-07-01 |  10000 |
+| Sachin pant    | 13000 | 2018-08-06 |  14000 |
+| Manager        | 17000 | 2018-10-03 |  22000 |
+| Marketing head | 89000 | 2018-11-03 |   NULL |
+| ram naresh     |  1200 | 0218-12-05 |   1201 |
++----------------+-------+------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> insert into employe values ('ram',120,"0218-12-06",121);
+Query OK, 1 row affected (0.25 sec)
+
+mysql> insert into employe values ('ram Ram',1290,"2108-03-06",1291);
+Query OK, 1 row affected (0.20 sec)
+
+mysql> insert into employe (name,sales,date) values ('Ghaseeta ram',12000,"20019-01-04");
+ERROR 1292 (22007): Incorrect date value: '20019-01-04' for column 'Date' at row 1
+mysql> insert into employe (name,sales,date) values ('Ghaseeta ram',12000,"2019-01-04");
+Query OK, 1 row affected (0.22 sec)
+
+mysql> select * from employe;
++----------------+-------+------------+--------+
+| name           | sales | Date       | target |
++----------------+-------+------------+--------+
+| Yash Saxena    | 12000 | 2018-07-01 |  10000 |
+| Sachin pant    | 13000 | 2018-08-06 |  14000 |
+| Manager        | 17000 | 2018-10-03 |  22000 |
+| Marketing head | 89000 | 2018-11-03 |   NULL |
+| ram naresh     |  1200 | 0218-12-05 |   1201 |
+| ram            |   120 | 0218-12-06 |    121 |
+| ram Ram        |  1290 | 2108-03-06 |   1291 |
+| Ghaseeta ram   | 12000 | 2019-01-04 |   NULL |
++----------------+-------+------------+--------+
+8 rows in set (0.00 sec)
+
+mysql> select target from employe
+    -> where target between NULL and NULL;
+Empty set (0.00 sec)
+
+mysql> select target from employe
+    -> where target between NULL and 1291;
+Empty set (0.00 sec)
+
+mysql> where target between 1201 nd NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where target between 1201 nd NULL' at line 1
+mysql> select target from employe
+    -> where target between 1201 nd NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'nd NULL' at line 2
+mysql> select target from employe
+    -> where target between 1201 and NULL;
+Empty set (0.00 sec)
+
+mysql> select * from employe where target in (10000,14000,121);
++-------------+-------+------------+--------+
+| name        | sales | Date       | target |
++-------------+-------+------------+--------+
+| Yash Saxena | 12000 | 2018-07-01 |  10000 |
+| Sachin pant | 13000 | 2018-08-06 |  14000 |
+| ram         |   120 | 0218-12-06 |    121 |
++-------------+-------+------------+--------+
+3 rows in set (0.10 sec)
+
+mysql> select * from employe where target=10000 or target=121;
++-------------+-------+------------+--------+
+| name        | sales | Date       | target |
++-------------+-------+------------+--------+
+| Yash Saxena | 12000 | 2018-07-01 |  10000 |
+| ram         |   120 | 0218-12-06 |    121 |
++-------------+-------+------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select * from employe where target=10000 and target=121;
+Empty set (0.00 sec)
+
+mysql> select * from employe where target=10000 and sales=120;
+Empty set (0.00 sec)
+
+mysql> select * from employe where target=10000 and sales=12000;
++-------------+-------+------------+--------+
+| name        | sales | Date       | target |
++-------------+-------+------------+--------+
+| Yash Saxena | 12000 | 2018-07-01 |  10000 |
++-------------+-------+------------+--------+
+1 row in set (0.00 sec)
+
+mysql> select * from employe;
++----------------+-------+------------+--------+
+| name           | sales | Date       | target |
++----------------+-------+------------+--------+
+| Yash Saxena    | 12000 | 2018-07-01 |  10000 |
+| Sachin pant    | 13000 | 2018-08-06 |  14000 |
+| Manager        | 17000 | 2018-10-03 |  22000 |
+| Marketing head | 89000 | 2018-11-03 |   NULL |
+| ram naresh     |  1200 | 0218-12-05 |   1201 |
+| ram            |   120 | 0218-12-06 |    121 |
+| ram Ram        |  1290 | 2108-03-06 |   1291 |
+| Ghaseeta ram   | 12000 | 2019-01-04 |   NULL |
++----------------+-------+------------+--------+
+8 rows in set (0.00 sec)
+
+mysql> select name from employe
+    -> where target between NULL and NULL;
+Empty set (0.00 sec)
+
+mysql> select name from employe
+    -> where target in(NULL,NULL);
+Empty set (0.00 sec)
+
+mysql> select name from employe
+    -> where target in(NULL);
+Empty set (0.00 sec)
+
+mysql> select name from employe
+    -> where name like 'Yash';
+Empty set (0.03 sec)
+
+mysql> select name from employe
+    -> where name like 'Yash Saxena';
++-------------+
+| name        |
++-------------+
+| Yash Saxena |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select name from employe
+    -> where name='Yash Saxena','ram';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ','ram'' at line 2
+mysql> select name from employe
+    -> where name='Yash Saxena';
++-------------+
+| name        |
++-------------+
+| Yash Saxena |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select * from emoloye where name like 'ra%';
+ERROR 1146 (42S02): Table 'life.emoloye' doesn't exist
+mysql> select * from employe where name like 'ra%';
++------------+-------+------------+--------+
+| name       | sales | Date       | target |
++------------+-------+------------+--------+
+| ram naresh |  1200 | 0218-12-05 |   1201 |
+| ram        |   120 | 0218-12-06 |    121 |
+| ram Ram    |  1290 | 2108-03-06 |   1291 |
++------------+-------+------------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select * from employe where name like 'ra_';
++------+-------+------------+--------+
+| name | sales | Date       | target |
++------+-------+------------+--------+
+| ram  |   120 | 0218-12-06 |    121 |
++------+-------+------------+--------+
+1 row in set (0.00 sec)
+
+mysql> select * from employe where name like 'ra_ ra_';
++---------+-------+------------+--------+
+| name    | sales | Date       | target |
++---------+-------+------------+--------+
+| ram Ram |  1290 | 2108-03-06 |   1291 |
++---------+-------+------------+--------+
+1 row in set (0.00 sec)
+
+mysql> select * from employe where name like 'ra?'
+    -> ;
+Empty set (0.00 sec)
+
+mysql> select * from employe where name like 'r?'';
+    '> \c
+    '> 'c
+    -> \c
+mysql> select * from employe where name like 'r?';
+Empty set (0.00 sec)
+
+mysql> select * from employe where name like 'Ya@%  S% ' escape '@';
+Empty set (0.00 sec)
+
+mysql> select * from employe where name like 'Ya@%' escape '@';
+Empty set (0.00 sec)
+
+mysql> select * from employe where name like 'Ya%' escape '@';
++-------------+-------+------------+--------+
+| name        | sales | Date       | target |
++-------------+-------+------------+--------+
+| Yash Saxena | 12000 | 2018-07-01 |  10000 |
++-------------+-------+------------+--------+
+1 row in set (0.00 sec)
+
+mysql> select * from employe where name like '%m;
+    '> \c
+    '> ^C
+mysql> select * from employe where name like '%m';
++--------------+-------+------------+--------+
+| name         | sales | Date       | target |
++--------------+-------+------------+--------+
+| ram          |   120 | 0218-12-06 |    121 |
+| ram Ram      |  1290 | 2108-03-06 |   1291 |
+| Ghaseeta ram | 12000 | 2019-01-04 |   NULL |
++--------------+-------+------------+--------+
+3 rows in set (0.00 sec)
+
+mysql> se;ect
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'se' at line 1
+    ->
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ect' at line 1
+mysql> se;ect
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'se' at line 1
+    ->
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ect' at line 1
+mysql> select * from employe where target not in(10000,14000,22000);
++------------+-------+------------+--------+
+| name       | sales | Date       | target |
++------------+-------+------------+--------+
+| ram naresh |  1200 | 0218-12-05 |   1201 |
+| ram        |   120 | 0218-12-06 |    121 |
+| ram Ram    |  1290 | 2108-03-06 |   1291 |
++------------+-------+------------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select * from employe where target is NULL;
++----------------+-------+------------+--------+
+| name           | sales | Date       | target |
++----------------+-------+------------+--------+
+| Marketing head | 89000 | 2018-11-03 |   NULL |
+| Ghaseeta ram   | 12000 | 2019-01-04 |   NULL |
++----------------+-------+------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select * from employe where target=NULL;
+Empty set (0.00 sec)
+
+mysql> alter table add primary key(target);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'add primary key(target)' at line 1
+mysql> alter table employe add primary key(target);
+ERROR 1138 (22004): Invalid use of NULL value
+mysql> select * from employe;
++----------------+-------+------------+--------+
+| name           | sales | Date       | target |
++----------------+-------+------------+--------+
+| Yash Saxena    | 12000 | 2018-07-01 |  10000 |
+| Sachin pant    | 13000 | 2018-08-06 |  14000 |
+| Manager        | 17000 | 2018-10-03 |  22000 |
+| Marketing head | 89000 | 2018-11-03 |   NULL |
+| ram naresh     |  1200 | 0218-12-05 |   1201 |
+| ram            |   120 | 0218-12-06 |    121 |
+| ram Ram        |  1290 | 2108-03-06 |   1291 |
+| Ghaseeta ram   | 12000 | 2019-01-04 |   NULL |
++----------------+-------+------------+--------+
+8 rows in set (0.00 sec)
+
+mysql> delete from employe where target=NULL;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from employe;
++----------------+-------+------------+--------+
+| name           | sales | Date       | target |
++----------------+-------+------------+--------+
+| Yash Saxena    | 12000 | 2018-07-01 |  10000 |
+| Sachin pant    | 13000 | 2018-08-06 |  14000 |
+| Manager        | 17000 | 2018-10-03 |  22000 |
+| Marketing head | 89000 | 2018-11-03 |   NULL |
+| ram naresh     |  1200 | 0218-12-05 |   1201 |
+| ram            |   120 | 0218-12-06 |    121 |
+| ram Ram        |  1290 | 2108-03-06 |   1291 |
+| Ghaseeta ram   | 12000 | 2019-01-04 |   NULL |
++----------------+-------+------------+--------+
+8 rows in set (0.00 sec)
+
+mysql> delete from employe where target is NULL;
+Query OK, 2 rows affected (0.23 sec)
+
+mysql> select * from employe;
++-------------+-------+------------+--------+
+| name        | sales | Date       | target |
++-------------+-------+------------+--------+
+| Yash Saxena | 12000 | 2018-07-01 |  10000 |
+| Sachin pant | 13000 | 2018-08-06 |  14000 |
+| Manager     | 17000 | 2018-10-03 |  22000 |
+| ram naresh  |  1200 | 0218-12-05 |   1201 |
+| ram         |   120 | 0218-12-06 |    121 |
+| ram Ram     |  1290 | 2108-03-06 |   1291 |
++-------------+-------+------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select @hj:='121' from employe;
++------------+
+| @hj:='121' |
++------------+
+| 121        |
+| 121        |
+| 121        |
+| 121        |
+| 121        |
+| 121        |
++------------+
+6 rows in set, 1 warning (0.00 sec)
+
+mysql> delete from employe where target='@hj';
+ERROR 1292 (22007): Truncated incorrect DOUBLE value: '@hj'
+mysql> delete from employe where target='@hj:';
+ERROR 1292 (22007): Truncated incorrect DOUBLE value: '@hj:'
+mysql> delete from employe where target=@hj;
+Query OK, 1 row affected (0.17 sec)
+
+mysql> select * from employe;
++-------------+-------+------------+--------+
+| name        | sales | Date       | target |
++-------------+-------+------------+--------+
+| Yash Saxena | 12000 | 2018-07-01 |  10000 |
+| Sachin pant | 13000 | 2018-08-06 |  14000 |
+| Manager     | 17000 | 2018-10-03 |  22000 |
+| ram naresh  |  1200 | 0218-12-05 |   1201 |
+| ram Ram     |  1290 | 2108-03-06 |   1291 |
++-------------+-------+------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> alter table employe
+    -> add primary key (target);
+Query OK, 0 rows affected (2.49 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into employe (target) values (1291) \g
+ERROR 1062 (23000): Duplicate entry '1291' for key 'PRIMARY'
+mysql> select DISTINCT from employe;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from employe' at line 1
+mysql> select DISTINCT(target) from employe;
++--------+
+| target |
++--------+
+|   1201 |
+|   1291 |
+|  10000 |
+|  14000 |
+|  22000 |
++--------+
+5 rows in set (0.00 sec)
+
+mysql> inert into employe (name) values ('Yash Saxena');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'inert into employe (name) values ('Yash Saxena')' at line 1
+mysql> inert into employe values ('Yash Saxena');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'inert into employe values ('Yash Saxena')' at line 1
+mysql> insert into employe (name) values ('Yash Saxena');
+ERROR 1364 (HY000): Field 'target' doesn't have a default value
+mysql> insert into employe (name,sales,Date) values ('Yash Saxena',34000,"2022-09-23");
+ERROR 1364 (HY000): Field 'target' doesn't have a default value
+mysql> insert into employe (name,sales,Date) values ('Yash Saxena',34000,"2022-09-23",NULL);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into employe (name,sales,Date) values ('Yash Saxena',34000,"2022-09-23",0);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into employe (name,sales,Date) values ('Yash Saxena',34000,"2022-09-23",70);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into employe (name,sales,Date,target) values ('Yash Saxena',34000,"2022-09-23",NULL);
+ERROR 1048 (23000): Column 'target' cannot be null
+mysql> insert into employe (name,sales,Date,target) values ('Yash Saxena',34000,"2022-09-23",0);
+Query OK, 1 row affected (0.20 sec)
+
+mysql> select * from employe;
++-------------+-------+------------+--------+
+| name        | sales | Date       | target |
++-------------+-------+------------+--------+
+| Yash Saxena | 34000 | 2022-09-23 |      0 |
+| ram naresh  |  1200 | 0218-12-05 |   1201 |
+| ram Ram     |  1290 | 2108-03-06 |   1291 |
+| Yash Saxena | 12000 | 2018-07-01 |  10000 |
+| Sachin pant | 13000 | 2018-08-06 |  14000 |
+| Manager     | 17000 | 2018-10-03 |  22000 |
++-------------+-------+------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select DISTINCT(name) from employe;
++-------------+
+| name        |
++-------------+
+| Yash Saxena |
+| ram naresh  |
+| ram Ram     |
+| Sachin pant |
+| Manager     |
++-------------+
+5 rows in set (0.00 sec)
+
+mysql> source E:/hey.sql
+Query OK, 1 row affected (0.19 sec)
+
+Query OK, 1 row affected (0.07 sec)
+
+Query OK, 1 row affected (0.16 sec)
+
+Query OK, 1 row affected (0.06 sec)
+
+Query OK, 1 row affected (0.07 sec)
+
+Query OK, 1 row affected (0.07 sec)
+
+Query OK, 1 row affected (0.08 sec)
+
+Query OK, 1 row affected (0.08 sec)
+
+Query OK, 1 row affected (0.13 sec)
+
+Query OK, 1 row affected (0.07 sec)
+
+Query OK, 1 row affected (0.09 sec)
+
+mysql> select * from employe;
++-------------+-------+------------+--------+
+| name        | sales | Date       | target |
++-------------+-------+------------+--------+
+| Yash Saxena | 34000 | 2022-09-23 |      0 |
+| ram naresh  |  1200 | 0218-12-05 |   1201 |
+| ram Ram     |  1290 | 2108-03-06 |   1291 |
+| Yash Saxena | 12000 | 2018-07-01 |  10000 |
+| Sachin pant | 13000 | 2018-08-06 |  14000 |
+| Manager     | 17000 | 2018-10-03 |  22000 |
++-------------+-------+------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select * from employe where target=0 or sales=1200;
++-------------+-------+------------+--------+
+| name        | sales | Date       | target |
++-------------+-------+------------+--------+
+| Yash Saxena | 34000 | 2022-09-23 |      0 |
+| ram naresh  |  1200 | 0218-12-05 |   1201 |
++-------------+-------+------------+--------+
+2 rows in set (0.03 sec)
+
+mysql> select * from employe where target=0 or sales=120000;
++-------------+-------+------------+--------+
+| name        | sales | Date       | target |
++-------------+-------+------------+--------+
+| Yash Saxena | 34000 | 2022-09-23 |      0 |
++-------------+-------+------------+--------+
+1 row in set (0.00 sec)
